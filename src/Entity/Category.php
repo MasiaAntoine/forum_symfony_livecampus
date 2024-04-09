@@ -25,12 +25,12 @@ class Category
     /**
      * @var Collection<int, Board>
      */
-    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'category_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'category', orphanRemoval: true)]
     private Collection $boards;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_uuid = null;
+    private ?user $user = null;
 
     public function __construct()
     {
@@ -78,7 +78,7 @@ class Category
     {
         if (!$this->boards->contains($board)) {
             $this->boards->add($board);
-            $board->setCategoryId($this);
+            $board->setCategory($this);
         }
 
         return $this;
@@ -88,22 +88,22 @@ class Category
     {
         if ($this->boards->removeElement($board)) {
             // set the owning side to null (unless already changed)
-            if ($board->getCategoryId() === $this) {
-                $board->setCategoryId(null);
+            if ($board->getCategory() === $this) {
+                $board->setCategory(null);
             }
         }
 
         return $this;
     }
 
-    public function getUserUuid(): ?user
+    public function getUser(): ?user
     {
-        return $this->user_uuid;
+        return $this->user;
     }
 
-    public function setUserUuid(?user $user_uuid): static
+    public function setUser(?user $user): static
     {
-        $this->user_uuid = $user_uuid;
+        $this->user = $user;
 
         return $this;
     }

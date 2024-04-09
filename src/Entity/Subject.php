@@ -16,14 +16,6 @@ class Subject
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subjects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?board $board_id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'subjects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_uuid = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
@@ -33,41 +25,33 @@ class Subject
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'subject_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'subject', orphanRemoval: true)]
     private Collection $messages;
+
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?board $board = null;
+
+    /**
+     * @var Collection<int, Subject>
+     */
+    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'subject', orphanRemoval: true)]
+    private Collection $subjects;
+
+    #[ORM\ManyToOne(inversedBy: 'subjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?user $user = null;
+
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getBoardId(): ?board
-    {
-        return $this->board_id;
-    }
-
-    public function setBoardId(?board $board_id): static
-    {
-        $this->board_id = $board_id;
-
-        return $this;
-    }
-
-    public function getUserUuid(): ?user
-    {
-        return $this->user_uuid;
-    }
-
-    public function setUserUuid(?user $user_uuid): static
-    {
-        $this->user_uuid = $user_uuid;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -106,7 +90,7 @@ class Subject
     {
         if (!$this->messages->contains($message)) {
             $this->messages->add($message);
-            $message->setSubjectId($this);
+            $message->setSubject($this);
         }
 
         return $this;
@@ -116,10 +100,35 @@ class Subject
     {
         if ($this->messages->removeElement($message)) {
             // set the owning side to null (unless already changed)
-            if ($message->getSubjectId() === $this) {
-                $message->setSubjectId(null);
+            if ($message->getSubject() === $this) {
+                $message->setSubject(null);
             }
         }
+
+        return $this;
+    }
+
+
+    public function getBoard(): ?board
+    {
+        return $this->board;
+    }
+
+    public function setBoard(?board $board): static
+    {
+        $this->board = $board;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -15,21 +15,21 @@ class File
 
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?message $message_id = null;
+    private ?message $message = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getMessageId(): ?message
+    public function getMessage(): ?message
     {
-        return $this->message_id;
+        return $this->message;
     }
 
-    public function setMessageId(?message $message_id): static
+    public function setMessage(?message $message): static
     {
-        $this->message_id = $message_id;
+        $this->message = $message;
 
         return $this;
     }

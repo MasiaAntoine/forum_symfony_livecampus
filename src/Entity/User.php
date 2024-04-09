@@ -35,35 +35,35 @@ class User
     private ?\DateTimeInterface $updated_at = null;
 
     /**
-     * @var Collection<int, Subject>
-     */
-    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'user_uuid', orphanRemoval: true)]
-    private Collection $subjects;
-
-    /**
-     * @var Collection<int, Message>
-     */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user_uuid', orphanRemoval: true)]
-    private Collection $messages;
-
-    /**
      * @var Collection<int, Board>
      */
-    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'user_uuid', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $boards;
 
     /**
      * @var Collection<int, Category>
      */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'user_uuid', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $categories;
+
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $messages;
+
+    /**
+     * @var Collection<int, Subject>
+     */
+    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $subjects;
 
     public function __construct()
     {
-        $this->subjects = new ArrayCollection();
-        $this->messages = new ArrayCollection();
         $this->boards = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,66 +144,6 @@ class User
     }
 
     /**
-     * @return Collection<int, Subject>
-     */
-    public function getSubjects(): Collection
-    {
-        return $this->subjects;
-    }
-
-    public function addSubject(Subject $subject): static
-    {
-        if (!$this->subjects->contains($subject)) {
-            $this->subjects->add($subject);
-            $subject->setUserUuid($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubject(Subject $subject): static
-    {
-        if ($this->subjects->removeElement($subject)) {
-            // set the owning side to null (unless already changed)
-            if ($subject->getUserUuid() === $this) {
-                $subject->setUserUuid(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): static
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setUserUuid($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): static
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getUserUuid() === $this) {
-                $message->setUserUuid(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Board>
      */
     public function getBoards(): Collection
@@ -215,7 +155,7 @@ class User
     {
         if (!$this->boards->contains($board)) {
             $this->boards->add($board);
-            $board->setUserUuid($this);
+            $board->setUser($this);
         }
 
         return $this;
@@ -225,8 +165,8 @@ class User
     {
         if ($this->boards->removeElement($board)) {
             // set the owning side to null (unless already changed)
-            if ($board->getUserUuid() === $this) {
-                $board->setUserUuid(null);
+            if ($board->getUser() === $this) {
+                $board->setUser(null);
             }
         }
 
@@ -245,7 +185,7 @@ class User
     {
         if (!$this->categories->contains($category)) {
             $this->categories->add($category);
-            $category->setUserUuid($this);
+            $category->setUser($this);
         }
 
         return $this;
@@ -255,8 +195,68 @@ class User
     {
         if ($this->categories->removeElement($category)) {
             // set the owning side to null (unless already changed)
-            if ($category->getUserUuid() === $this) {
-                $category->setUserUuid(null);
+            if ($category->getUser() === $this) {
+                $category->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subject>
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): static
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects->add($subject);
+            $subject->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): static
+    {
+        if ($this->subjects->removeElement($subject)) {
+            // set the owning side to null (unless already changed)
+            if ($subject->getUser() === $this) {
+                $subject->setUser(null);
             }
         }
 

@@ -16,14 +16,6 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?subject $subject_id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'messages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_uuid = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
@@ -36,8 +28,17 @@ class Message
     /**
      * @var Collection<int, File>
      */
-    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'message_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'message', orphanRemoval: true)]
     private Collection $files;
+
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?user $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?subject $subject = null;
+
 
     public function __construct()
     {
@@ -47,30 +48,6 @@ class Message
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSubjectId(): ?subject
-    {
-        return $this->subject_id;
-    }
-
-    public function setSubjectId(?subject $subject_id): static
-    {
-        $this->subject_id = $subject_id;
-
-        return $this;
-    }
-
-    public function getUserUuid(): ?user
-    {
-        return $this->user_uuid;
-    }
-
-    public function setUserUuid(?user $user_uuid): static
-    {
-        $this->user_uuid = $user_uuid;
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -121,7 +98,7 @@ class Message
     {
         if (!$this->files->contains($file)) {
             $this->files->add($file);
-            $file->setMessageId($this);
+            $file->setMessage($this);
         }
 
         return $this;
@@ -131,11 +108,36 @@ class Message
     {
         if ($this->files->removeElement($file)) {
             // set the owning side to null (unless already changed)
-            if ($file->getMessageId() === $this) {
-                $file->setMessageId(null);
+            if ($file->getMessage() === $this) {
+                $file->setMessage(null);
             }
         }
 
         return $this;
     }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSubject(): ?subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?subject $subject): static
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
 }

@@ -16,25 +16,25 @@ class Board
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'boards')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?category $category_id = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-    /**
-     * @var Collection<int, Subject>
-     */
-    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'board_id', orphanRemoval: true)]
-    private Collection $subjects;
+    #[ORM\ManyToOne(inversedBy: 'boards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'boards')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_uuid = null;
+    private ?user $user = null;
+
+    /**
+     * @var Collection<int, Subject>
+     */
+    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'board', orphanRemoval: true)]
+    private Collection $subjects;
 
     public function __construct()
     {
@@ -44,18 +44,6 @@ class Board
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCategoryId(): ?category
-    {
-        return $this->category_id;
-    }
-
-    public function setCategoryId(?category $category_id): static
-    {
-        $this->category_id = $category_id;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -82,6 +70,30 @@ class Board
         return $this;
     }
 
+    public function getCategory(): ?category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Subject>
      */
@@ -94,7 +106,7 @@ class Board
     {
         if (!$this->subjects->contains($subject)) {
             $this->subjects->add($subject);
-            $subject->setBoardId($this);
+            $subject->setBoard($this);
         }
 
         return $this;
@@ -104,22 +116,10 @@ class Board
     {
         if ($this->subjects->removeElement($subject)) {
             // set the owning side to null (unless already changed)
-            if ($subject->getBoardId() === $this) {
-                $subject->setBoardId(null);
+            if ($subject->getBoard() === $this) {
+                $subject->setBoard(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getUserUuid(): ?user
-    {
-        return $this->user_uuid;
-    }
-
-    public function setUserUuid(?user $user_uuid): static
-    {
-        $this->user_uuid = $user_uuid;
 
         return $this;
     }

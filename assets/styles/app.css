@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Your custom styles here */
+
+.center {
+    @apply w-1/2 h-full p-10;
+}
+
+.container {
+    @apply w-full h-full flex items-center justify-center;
+}

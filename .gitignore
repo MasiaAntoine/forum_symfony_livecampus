@@ -27,7 +27,7 @@
 .vscode
 composer.lock
 .env
-package.lock
+package-lock.json
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/

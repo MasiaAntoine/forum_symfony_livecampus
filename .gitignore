@@ -25,3 +25,4 @@
 ###< symfony/asset-mapper ###
 
 .vscode
+composer.lock

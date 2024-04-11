@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Subject;
 use App\Form\SubjectType;
 use App\Repository\SubjectRepository;
+use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class SubjectController extends AbstractController
 {
     #[Route('/', name: 'app_subject_index', methods: ['GET'])]
-    public function index(SubjectRepository $subjectRepository): Response
+    public function index(SubjectRepository $subjectRepository, AuthService $auth, Request $request): Response
     {
+        if(!$auth->isConnected($request)) {
+            return $this->redirectToRoute('login_index');
+        }
+
         return $this->render('subject/index.html.twig', [
             'subjects' => $subjectRepository->findAll(),
         ]);

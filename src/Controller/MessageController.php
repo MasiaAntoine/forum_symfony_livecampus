@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Message;
 use App\Form\MessageType;
 use App\Repository\MessageRepository;
+use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +16,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class MessageController extends AbstractController
 {
     #[Route('/', name: 'app_message_index', methods: ['GET'])]
-    public function index(MessageRepository $messageRepository): Response
+    public function index(MessageRepository $messageRepository, AuthService $auth, Request $request): Response
     {
+        if(!$auth->isConnected($request)) {
+            return $this->redirectToRoute('login_index');
+        }
+
         return $this->render('message/index.html.twig', [
             'messages' => $messageRepository->findAll(),
         ]);

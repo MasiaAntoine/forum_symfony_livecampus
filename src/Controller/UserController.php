@@ -5,34 +5,22 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
-    // private function isConnected(SessionInterface $session): bool
-    // {
-    //     // return $session->has('user');
-    //     return false;
-    // }
-
-    // private function redirectToLogin(): Response
-    // {
-    //     return $this->redirectToRoute('login_route');
-    // }
-
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository, Request $request): Response
+    public function index(UserRepository $userRepository, AuthService $auth, Request $request): Response
     {
-        // if (!$this->isConnected($request->getSession())) {
-        //     return $this->redirectToLogin();
-        // }
+        if(!$auth->isConnected($request)) {
+            return $this->redirectToRoute('login_index');
+        }
 
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),

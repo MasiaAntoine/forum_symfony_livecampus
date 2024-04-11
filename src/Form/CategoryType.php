@@ -20,10 +20,10 @@ class CategoryType extends AbstractType
             ->add('updated_at', null, [
                 'widget' => 'single_text',
             ])
-            ->add('user', EntityType::class, [
-                'class' => user::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('user', EntityType::class, [
+            //     'class' => user::class,
+            //     'choice_label' => 'id',
+            // ])
             ->add('name')
         ;
     }

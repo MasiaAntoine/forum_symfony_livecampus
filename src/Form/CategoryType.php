@@ -14,12 +14,12 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
+            // ->add('created_at', null, [
+            //     'widget' => 'single_text',
+            // ])
+            // ->add('updated_at', null, [
+            //     'widget' => 'single_text',
+            // ])
             // ->add('user', EntityType::class, [
             //     'class' => user::class,
             //     'choice_label' => 'id',

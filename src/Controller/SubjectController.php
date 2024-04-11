@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Subject;
 use App\Form\SubjectType;
 use App\Repository\SubjectRepository;
+use App\Repository\UserRepository;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,13 +29,18 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $subject = new Subject();
         $form = $this->createForm(SubjectType::class, $subject);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $userRepository->find($request->getSession()->get('user_id'));
+            $subject->setUser($user);
+            $subject->setCreatedAt(new \DateTime());
+            $subject->setUpdatedAt(new \DateTime());
+
             $entityManager->persist($subject);
             $entityManager->flush();
 

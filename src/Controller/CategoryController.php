@@ -34,17 +34,19 @@ class CategoryController extends AbstractController
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userRepository->find($request->getSession()->get('user_id'));
             $category->setUser($user);
-
+            $category->setCreatedAt(new \DateTime());
+            $category->setUpdatedAt(new \DateTime());
+    
             $entityManager->persist($category);
             $entityManager->flush();
-
+    
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('category/new.html.twig', [
             'category' => $category,
             'form' => $form,

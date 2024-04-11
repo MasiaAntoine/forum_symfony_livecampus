@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Board;
 use App\Form\BoardType;
 use App\Repository\BoardRepository;
+use App\Repository\UserRepository;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,13 +29,17 @@ class BoardController extends AbstractController
     }
 
     #[Route('/new', name: 'app_board_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $board = new Board();
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $userRepository->find($request->getSession()->get('user_id'));
+            $board->setCreatedAt(new \DateTime());
+            $board->setUpdatedAt(new \DateTime());
+            $board->setUser($user);
             $entityManager->persist($board);
             $entityManager->flush();
 

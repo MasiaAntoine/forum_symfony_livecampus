@@ -31,7 +31,7 @@ class LoginController extends AbstractController
             $userResponse = $userRepository->findByEmail($user->getEmail());
 
             if ($userResponse) {
-                if($userResponse[0]['password'] === $user->getPassword()) {
+                if (password_verify($user->getPassword(), $userResponse[0]['password'])) {
                     //Création de la session de l'id user.
                     $userId = $userResponse[0]['id'];
                     $session->set('user_id', $userId);

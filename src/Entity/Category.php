@@ -30,7 +30,7 @@ class Category
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;

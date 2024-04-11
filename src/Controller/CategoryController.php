@@ -30,6 +30,9 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $category->setUser($user);
+
             $entityManager->persist($category);
             $entityManager->flush();
 
@@ -41,6 +44,7 @@ class CategoryController extends AbstractController
             'form' => $form,
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
     public function show(Category $category): Response

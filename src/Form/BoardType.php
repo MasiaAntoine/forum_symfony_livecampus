@@ -29,6 +29,7 @@ class BoardType extends AbstractType
                 'class' => user::class,
                 'choice_label' => 'id',
             ])
+            ->add('name')
         ;
     }
 

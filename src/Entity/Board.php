@@ -24,11 +24,11 @@ class Board
 
     #[ORM\ManyToOne(inversedBy: 'boards')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
+    private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'boards')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     /**
      * @var Collection<int, Subject>

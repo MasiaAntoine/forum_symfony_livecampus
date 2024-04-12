@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/user')]
 class UserController extends AbstractController
 {
+    /**
+     * Renders the index page for users.
+     *
+     * @param UserRepository $userRepository The repository for accessing User entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, AuthService $auth, Request $request): Response
     {
@@ -27,6 +35,13 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new user.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,6 +65,12 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the show page for a specific user.
+     *
+     * @param User $user The user entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
@@ -58,6 +79,14 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a user.
+     *
+     * @param Request $request The HTTP request.
+     * @param User $user The user entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -76,6 +105,14 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a user.
+     *
+     * @param Request $request The HTTP request.
+     * @param User $user The user entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {

@@ -7,7 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Subject>
+ * Repository for accessing Subject entities.
+ *
+ * This class extends ServiceEntityRepository<Subject> which provides basic CRUD operations.
  *
  * @method Subject|null find($id, $lockMode = null, $lockVersion = null)
  * @method Subject|null findOneBy(array $criteria, array $orderBy = null)

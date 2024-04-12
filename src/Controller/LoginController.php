@@ -17,6 +17,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/login')]
 class LoginController extends AbstractController
 {
+    /**
+     * Renders the login page and handles user authentication.
+     *
+     * @param UserRepository $userRepository The repository for accessing User entities.
+     * @param Request $request The HTTP request.
+     * @param SessionInterface $session The session interface for managing sessions.
+     * @return Response The HTTP response containing the rendered page or an error response.
+     */
     #[Route('/', name: 'login_index', methods: ['GET', 'POST'])]
     public function index(UserRepository $userRepository, Request $request, SessionInterface $session): Response
     {
@@ -51,6 +59,12 @@ class LoginController extends AbstractController
         ]);
     }
 
+    /**
+     * Logs the user out by invalidating the session and redirects to the login page.
+     *
+     * @param SessionInterface $session The session interface for managing sessions.
+     * @return RedirectResponse The HTTP response redirecting to the login page.
+     */
     #[Route('/logout', name: 'logout')]
     public function logout(SessionInterface $session): RedirectResponse
     {

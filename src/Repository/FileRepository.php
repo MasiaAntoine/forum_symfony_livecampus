@@ -7,7 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<File>
+ * Repository for accessing File entities.
+ *
+ * This class extends ServiceEntityRepository<File> which provides basic CRUD operations.
  *
  * @method File|null find($id, $lockMode = null, $lockVersion = null)
  * @method File|null findOneBy(array $criteria, array $orderBy = null)

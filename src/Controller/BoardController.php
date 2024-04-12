@@ -16,6 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/board')]
 class BoardController extends AbstractController
 {
+    /**
+     * Renders the index page for boards.
+     *
+     * @param BoardRepository $boardRepository The repository for accessing Board entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/', name: 'app_board_index', methods: ['GET'])]
     public function index(BoardRepository $boardRepository, AuthService $auth, Request $request): Response
     {
@@ -28,6 +36,14 @@ class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new board.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @param UserRepository $userRepository The repository for accessing User entities.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/new', name: 'app_board_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
@@ -52,6 +68,12 @@ class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the show page for a specific board.
+     *
+     * @param Board $board The board entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_board_show', methods: ['GET'])]
     public function show(Board $board): Response
     {
@@ -60,6 +82,14 @@ class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a board.
+     *
+     * @param Request $request The HTTP request.
+     * @param Board $board The board entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_board_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {
@@ -78,6 +108,14 @@ class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a board.
+     *
+     * @param Request $request The HTTP request.
+     * @param Board $board The board entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_board_delete', methods: ['POST'])]
     public function delete(Request $request, Board $board, EntityManagerInterface $entityManager): Response
     {

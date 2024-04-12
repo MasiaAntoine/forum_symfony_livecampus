@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/file')]
 class FileController extends AbstractController
 {
+    /**
+     * Renders the index page for files.
+     *
+     * @param FileRepository $fileRepository The repository for accessing File entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/', name: 'app_file_index', methods: ['GET'])]
     public function index(FileRepository $fileRepository, AuthService $auth, Request $request): Response
     {
@@ -27,6 +35,13 @@ class FileController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new file.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/new', name: 'app_file_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -47,6 +62,12 @@ class FileController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the show page for a specific file.
+     *
+     * @param File $file The file entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_file_show', methods: ['GET'])]
     public function show(File $file): Response
     {
@@ -55,6 +76,14 @@ class FileController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a file.
+     *
+     * @param Request $request The HTTP request.
+     * @param File $file The file entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_file_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, File $file, EntityManagerInterface $entityManager): Response
     {
@@ -73,6 +102,14 @@ class FileController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a file.
+     *
+     * @param Request $request The HTTP request.
+     * @param File $file The file entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_file_delete', methods: ['POST'])]
     public function delete(Request $request, File $file, EntityManagerInterface $entityManager): Response
     {

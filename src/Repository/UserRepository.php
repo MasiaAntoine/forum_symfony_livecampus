@@ -40,6 +40,22 @@ class UserRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findRoleById($userId): ?string
+    {
+        $userData = $this->createQueryBuilder('u')
+            ->select('u.role')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if ($userData) {
+            var_dump($userData['role']);
+            return $userData['role'];
+        } else {
+            return null;
+        }
+    }
+
     //    public function findOneBySomeField($value): ?User
     //    {
     //        return $this->createQueryBuilder('u')

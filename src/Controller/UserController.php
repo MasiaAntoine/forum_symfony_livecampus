@@ -26,7 +26,7 @@ class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, AuthService $auth, Request $request): Response
     {
-        if(!$auth->isConnected($request)) {
+        if(!$auth->isAdmin($request, $userRepository)) {
             return $this->redirectToRoute('login_index');
         }
 

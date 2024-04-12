@@ -1,6 +1,7 @@
-<?php 
+<?php
 namespace App\Service;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 
 class AuthService
@@ -19,5 +20,19 @@ class AuthService
             return false;
         }
         return true;
+    }
+
+    public function isAdmin(Request $request, UserRepository $userRepository) : bool
+    {
+        $session = $request->getSession();
+
+        if ($this->isConnected($request)) {
+            $userId = $session->get('user_id');
+            $role = $userRepository->findRoleById($userId);
+            if ($role === "admin") {
+                return true;
+            }
+        }
+        return false;
     }
 }

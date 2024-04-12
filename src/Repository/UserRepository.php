@@ -49,7 +49,6 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
         if ($userData) {
-            var_dump($userData['role']);
             return $userData['role'];
         } else {
             return null;

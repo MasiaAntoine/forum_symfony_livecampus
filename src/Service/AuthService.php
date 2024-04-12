@@ -29,7 +29,7 @@ class AuthService
         if ($this->isConnected($request)) {
             $userId = $session->get('user_id');
             $role = $userRepository->findRoleById($userId);
-            if ($role === "admin") {
+            if ($role === "Admin") {
                 return true;
             }
         }

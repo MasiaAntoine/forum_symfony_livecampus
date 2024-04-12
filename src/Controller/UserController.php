@@ -26,7 +26,7 @@ class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository, AuthService $auth, Request $request): Response
     {
-        if(!$auth->isAdmin($request, $userRepository)) {
+        if(!$auth->isConnected($request)) {
             return $this->redirectToRoute('login_index');
         }
 
@@ -43,8 +43,12 @@ class UserController extends AbstractController
      * @return Response The HTTP response containing a redirection.
      */
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(UserRepository $userRepository, Request $request, EntityManagerInterface $entityManager, AuthService $auth): Response
     {
+        if(!$auth->isAdmin($request, $userRepository)) {
+            return $this->redirectToRoute('login_index');
+        }
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);

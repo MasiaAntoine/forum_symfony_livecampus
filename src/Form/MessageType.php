@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Message;
 use App\Entity\subject;
-use App\Entity\user;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,19 +16,9 @@ class MessageType extends AbstractType
     {
         $builder
             ->add('content')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('user', EntityType::class, [
-                'class' => user::class,
-                'choice_label' => 'id',
-            ])
             ->add('subject', EntityType::class, [
                 'class' => subject::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }

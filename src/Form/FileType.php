@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\File;
-use App\Entity\message;
+use App\Entity\Message;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +15,7 @@ class FileType extends AbstractType
     {
         $builder
             ->add('message', EntityType::class, [
-                'class' => message::class,
+                'class' => Message::class,
                 'choice_label' => 'id',
             ])
         ;

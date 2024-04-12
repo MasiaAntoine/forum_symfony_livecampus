@@ -95,6 +95,7 @@ class SubjectController extends AbstractController
     public function edit(Request $request, Subject $subject, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SubjectType::class, $subject);
+        $subject->setUpdatedAt(new \DateTime());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

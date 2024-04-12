@@ -15,7 +15,7 @@ class File
 
     #[ORM\ManyToOne(inversedBy: 'files')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?message $message = null;
+    private ?Message $message = null;
 
     public function getId(): ?int
     {

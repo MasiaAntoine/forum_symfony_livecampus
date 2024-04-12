@@ -8,7 +8,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 
 /**
- * @extends ServiceEntityRepository<User>
+ * Repository for accessing User entities.
+ *
+ * This class extends ServiceEntityRepository<User> which provides basic CRUD operations.
  *
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
@@ -22,18 +24,21 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-       /**
-        * @return User Returns a User
-        */
-       public function findByEmail($value): array
-       {
-           return $this->createQueryBuilder('u')
-               ->andWhere('u.email = :val')
-               ->setParameter('val', $value)
-               ->getQuery()
-               ->getResult(Query::HYDRATE_ARRAY);
-               ;
-       }
+    /**
+     * Finds a user by their email address.
+     *
+     * @param string $value The email address of the user to find.
+     * @return User[] Returns an array of User entities.
+     */
+    public function findByEmail($value): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+            ;
+    }
 
     //    public function findOneBySomeField($value): ?User
     //    {

@@ -16,6 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/category')]
 class CategoryController extends AbstractController
 {
+    /**
+     * Renders the index page for categories.
+     *
+     * @param CategoryRepository $categoryRepository The repository for accessing Category entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/', name: 'app_category_index', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository, AuthService $auth, Request $request): Response
     {
@@ -28,6 +36,14 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new category.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @param UserRepository $userRepository The repository for accessing User entities.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
@@ -53,7 +69,12 @@ class CategoryController extends AbstractController
         ]);
     }
     
-
+    /**
+     * Renders the show page for a specific category.
+     *
+     * @param Category $category The category entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
     public function show(Category $category): Response
     {
@@ -62,6 +83,14 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a category.
+     *
+     * @param Request $request The HTTP request.
+     * @param Category $category The category entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
@@ -80,6 +109,14 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a category.
+     *
+     * @param Request $request The HTTP request.
+     * @param Category $category The category entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {

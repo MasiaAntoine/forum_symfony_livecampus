@@ -16,6 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/subject')]
 class SubjectController extends AbstractController
 {
+    /**
+     * Renders the index page for subjects.
+     *
+     * @param SubjectRepository $subjectRepository The repository for accessing Subject entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/', name: 'app_subject_index', methods: ['GET'])]
     public function index(SubjectRepository $subjectRepository, AuthService $auth, Request $request): Response
     {
@@ -28,6 +36,14 @@ class SubjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new subject.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @param UserRepository $userRepository The repository for accessing User entities.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
@@ -53,6 +69,12 @@ class SubjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the show page for a specific subject.
+     *
+     * @param Subject $subject The subject entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_subject_show', methods: ['GET'])]
     public function show(Subject $subject): Response
     {
@@ -61,6 +83,14 @@ class SubjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a subject.
+     *
+     * @param Request $request The HTTP request.
+     * @param Subject $subject The subject entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_subject_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Subject $subject, EntityManagerInterface $entityManager): Response
     {
@@ -79,6 +109,14 @@ class SubjectController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a subject.
+     *
+     * @param Request $request The HTTP request.
+     * @param Subject $subject The subject entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_subject_delete', methods: ['POST'])]
     public function delete(Request $request, Subject $subject, EntityManagerInterface $entityManager): Response
     {

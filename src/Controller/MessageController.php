@@ -15,6 +15,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/message')]
 class MessageController extends AbstractController
 {
+    /**
+     * Renders the index page for messages.
+     *
+     * @param MessageRepository $messageRepository The repository for accessing Message entities.
+     * @param AuthService $auth The authentication service.
+     * @param Request $request The HTTP request.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/', name: 'app_message_index', methods: ['GET'])]
     public function index(MessageRepository $messageRepository, AuthService $auth, Request $request): Response
     {
@@ -27,6 +35,13 @@ class MessageController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the creation of a new message.
+     *
+     * @param Request $request The HTTP request.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/new', name: 'app_message_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -47,6 +62,12 @@ class MessageController extends AbstractController
         ]);
     }
 
+    /**
+     * Renders the show page for a specific message.
+     *
+     * @param Message $message The message entity to display.
+     * @return Response The HTTP response containing the rendered page.
+     */
     #[Route('/{id}', name: 'app_message_show', methods: ['GET'])]
     public function show(Message $message): Response
     {
@@ -55,6 +76,14 @@ class MessageController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the editing of a message.
+     *
+     * @param Request $request The HTTP request.
+     * @param Message $message The message entity to edit.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing the rendered page or a redirection.
+     */
     #[Route('/{id}/edit', name: 'app_message_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Message $message, EntityManagerInterface $entityManager): Response
     {
@@ -73,6 +102,14 @@ class MessageController extends AbstractController
         ]);
     }
 
+    /**
+     * Handles the deletion of a message.
+     *
+     * @param Request $request The HTTP request.
+     * @param Message $message The message entity to delete.
+     * @param EntityManagerInterface $entityManager The entity manager for database operations.
+     * @return Response The HTTP response containing a redirection.
+     */
     #[Route('/{id}', name: 'app_message_delete', methods: ['POST'])]
     public function delete(Request $request, Message $message, EntityManagerInterface $entityManager): Response
     {

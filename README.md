@@ -39,6 +39,17 @@ Ce projet a été réalisé dans le cadre du cursus scolaire pour **LiveCampus**
 5. Enfin, démarrez le serveur Symfony avec `symfony server:start`.
 6. L'accès à l'application est réalisable dans votre navigateur à l'adresse diffusée par Symfony.
 
+## 🧪 Pour tester
+1. Aller sur la page démo de l'application : [Démo](https://forum.luwa.fr).
+2. Créer un compte avec une adresse e-mail de domaine :
+   - `@admin.fr' pour obtenir le rôle administrateur.
+   - `@insider.fr' pour obtenir le rôle d'insider.
+   - `@external.fr' pour obtenir le rôle d'external.
+   - `@collaborator.fr' pour obtenir le rôle de collaborator.
+   - ou autre pour obtenir le rôle de user.
+3. Connectez-vous avec le compte créé.
+4. Vous pouvez maintenant tester les fonctionnalités de l'application.
+
 ## 👥 Contributeurs
 - Antoine Masia - [@MasiaAntoine](https://github.com/MasiaAntoine)
 - Tristan Leblond - [@TristanLBD](https://github.com/TristanLBD)

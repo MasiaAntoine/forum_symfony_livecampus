@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use App\Repository\BoardRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BoardRepository::class)]
@@ -16,32 +14,26 @@ class Board
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updated_at = null;
-
-    #[ORM\ManyToOne(inversedBy: 'boards')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category = null;
-
-    #[ORM\ManyToOne(inversedBy: 'boards')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    /**
-     * @var Collection<int, Subject>
-     */
-    #[ORM\OneToMany(targetEntity: Subject::class, mappedBy: 'board', orphanRemoval: true)]
-    private Collection $subjects;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'boards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $category;
+
+    #[ORM\OneToMany(mappedBy: 'board', targetEntity: Topic::class)]
+    private $topics;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'boards')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $author;
+
+    #[ORM\Column(type: 'json')]
+    private array $rolesAllowed = [];
+
     public function __construct()
     {
-        $this->subjects = new ArrayCollection();
+        $this->topics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,79 +41,31 @@ class Board
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getRolesAllowed(): array
     {
-        return $this->created_at;
+        return $this->rolesAllowed;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): static
+    public function setRolesAllowed(array $rolesAllowed): static
     {
-        $this->created_at = $created_at;
+        $this->rolesAllowed = $rolesAllowed;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function addRoleAllowed(string $rolesAllowed): static
     {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getCategory(): ?category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?category $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getUser(): ?user
-    {
-        return $this->user;
-    }
-
-    public function setUser(?user $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Subject>
-     */
-    public function getSubjects(): Collection
-    {
-        return $this->subjects;
-    }
-
-    public function addSubject(Subject $subject): static
-    {
-        if (!$this->subjects->contains($subject)) {
-            $this->subjects->add($subject);
-            $subject->setBoard($this);
+        if (!in_array($rolesAllowed, $this->rolesAllowed)) {
+            $this->rolesAllowed[] = $rolesAllowed;
         }
 
         return $this;
     }
 
-    public function removeSubject(Subject $subject): static
+    public function removeRoleAllowed(string $rolesAllowed): static
     {
-        if ($this->subjects->removeElement($subject)) {
-            // set the owning side to null (unless already changed)
-            if ($subject->getBoard() === $this) {
-                $subject->setBoard(null);
-            }
+        if (in_array($rolesAllowed, $this->rolesAllowed)) {
+            $this->rolesAllowed = array_diff($this->rolesAllowed, [$rolesAllowed]);
         }
 
         return $this;
@@ -135,6 +79,57 @@ class Board
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getTopics()
+    {
+        return $this->topics;
+    }
+
+    public function addTopic(Topic $topic): self
+    {
+        if (!$this->topics->contains($topic)) {
+            $this->topics[] = $topic;
+            $topic->setBoard($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopic(Topic $topic): self
+    {
+        if ($this->topics->removeElement($topic)) {
+            // set the owning side to null (unless already changed)
+            if ($topic->getBoard() === $this) {
+                $topic->setBoard(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

@@ -1,37 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Board index{% endblock %}
+{% block title %}Forum - {{ board.name }}{% endblock %}
 
 {% block body %}
-    <h1>Board index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for board in boards %}
-            <tr>
-                <td>{{ board.id }}</td>
-                <td>{{ board.createdAt ? board.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ board.updatedAt ? board.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_board_show', {'id': board.id}) }}">show</a>
-                    <a href="{{ path('app_board_edit', {'id': board.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_board_new') }}">Create new</a>
+    <div class="container mx-auto my-8">
+        <nav class="bg-white dark:bg-gray-800 shadow-md rounded-md mb-4">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Bienvenue sur votre espace personnel</h3>
+                <div class="flex items-center gap-4">
+                    <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-700">Déconnexion</a>
+                    <a href="{{ path('app_profile', { 'id': app.user.id }) }}" class="flex items-center gap-2">
+                        {% if app.user.profilePicture is not null %}
+                            <img src="{{ asset('uploads/profile_picture/' ~ user.profilePicture) }}" alt="Image de profil de {{ user.username }}" class="rounded-full w-16 h-16">
+                        {% else %}
+                            <img src="{{ asset('profile_blank.jpeg') }}" alt="Avatar" class="w-16 h-16 rounded-full">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md px-8 py-4 mb-4">
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Accueil</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_category', { 'id': board.category.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ board.category.name }}</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_board', { 'id': board.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ board.name }}</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 flex gap-8 flex-col">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 flex items-center gap-10 w-full">
+                {{ form_start(form, { 'attr': { 'class': 'flex items-center gap-10 justify-between w-full' } }) }}
+                <div class="flex gap-10 items-center whitespace-nowrap">
+                    <div class="mr-4">
+                        <label for="name" class="text-gray-800 dark:text-gray-200">Nom du topic</label>
+                    </div>
+                    <div>
+                        {{ form_widget(form.title, { 'attr': { 'class': 'px-4 py-2 text-gray-800 dark:text-dark rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500' } })}}
+                    </div>
+                    <div>
+                        <label for="rolesAllowed" class="text-gray-800 dark:text-gray-200">Visible par :</label>
+                    </div>
+                    <div>
+                        {{ form_widget(form.rolesAllowed, {'attr': {'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 dark:text-white border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 flex items-center gap-4'}}) }}
+                        {{ form_errors(form.rolesAllowed, {'attr': {'class': 'text-red-500'}}) }}
+                    </div>
+                </div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Créer un topic</button>
+                {{ form_end(form) }}
+            </div>
+            <ul class="flex flex-col gap-4 bg-white dark:bg-gray-900 rounded-md p-4">
+                <li>
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Liste des topics</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Nombre de catégories: {{ topics|length }}</p>
+                </li>
+                {% if topics is empty %}
+                    <li class="rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Aucun topic trouvé</h3>
+                    </li>
+                {% endif %}
+                {% for topic in topics %}
+                    <li class="bg-white dark:bg-gray-800 rounded-lg p-4 hover:bg-gray-300 hover:dark:bg-gray-700 hover:cursor-pointer flex" onclick="window.location.href='{{ path('app_topic', { 'id': topic.id }) }}'">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ topic.title }}</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Auteur: {{ topic.author.username }}</p>
+                        </div>
+                        {% if (board.author.id == app.user.id) or (app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles) %}
+                            <div class="flex items-center gap-4 ml-auto">
+                                <a href="{{ path('app_topic_edit', { 'id': topic.id }) }}" onclick="event.stopPropagation()" class="text-blue-500 hover:text-blue-700">Modifier</a>
+                                <a href="{{ path('app_topic_delete', { 'id': topic.id }) }}" class="text-red-500 hover:text-red-700" onclick="event.stopPropagation(); return confirm('Voulez-vous vraiment supprimer ce topic ?')">Supprimer</a>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
+

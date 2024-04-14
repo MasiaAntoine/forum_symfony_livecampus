@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/forum_symfony_livecampus.iml" filepath="$PROJECT_DIR$/.idea/forum_symfony_livecampus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/forum_symfony.iml" filepath="$PROJECT_DIR$/.idea/forum_symfony.iml" />
     </modules>
   </component>
 </project>

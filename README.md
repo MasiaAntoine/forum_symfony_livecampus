@@ -1,25 +1,45 @@
-# Projet Forum en Symfony - Live Campus
-* Antoine Masia
-* Alan Hilarion
-* Leblond Tristan
+# 🏢 Projet LiveCampus.
+Ce projet a été réalisé dans le cadre du cursus scolaire pour **LiveCampus**.
 
-### Description
-Projet fictif réalisé à l'école Live Campus dans le cadre d'un exercice consistant à recréer un formulaire simpliste permettant de créer des catégories, d'y lier des boards, de lier des sujets à ces boards et d'envoyer des messages dans les différents sujets, avec possibilité d'y ajouter des pièces jointes.
+## 🗺️ Description
+**LiveCampus** est un réseau social d'entreprise conçu pour faciliter la communication, la collaboration au sein des équipes d'une entreprise, et accroître la productivité. Inspiré des forums en ligne, il permet aux utilisateurs de partager des informations, des messages et des fichiers dans un environnement sécurisé et convivial.
 
-### Diagramme de la base de données :
-Lien vers le [Diagramme](https://dbdiagram.io/d/Copy-of-forum_livecampus-661900ac03593b6b61d5a94f).
+## ⚙️ Fonctionnalités
+- **🔐 Authentication :**
+    - Inscription de nouveau compte avec attribution automatique de rôle en fonction du domaine de l'adresse e-mail.
+    - Connexion et déconnexion sécurisées.
+- **📚 Profil :**
+    - Affichage des informations du compte.
+    - Possibilité de modifier les informations du compte.
+    - Affichage des messages envoyés par l'utilisateur.
+    - Modification de la photo de profil.
+- **✍️ Rédaction :**
+    - Organisation des discussions par catégories.
+    - Création de "boards" au sein des catégories.
+    - Ouverture de sujets de discussion dans les "boards".
+    - Envoi de messages dans les sujets avec possibilité de joindre des fichiers.
+- **🔒 Autorisation :**
+    - Gestion des permissions pour limiter l'accès aux contenus en fonction des rôles.
+    - Administration des utilisateurs avec possibilité de modifier les rôles, de bloquer/débloquer et de supprimer des utilisateurs.
 
-### Technologies utilisées
-* Framework PHP Symfony 7
-* Framework Tailwind CSS pour le design responsive du site et des interfaces.
-* Base de données MySQL distante
+## 💻 Stack Technologique
+- Symfony 7.0
+- PHP
+- Doctrine ORM
+- Twig
+- MySQL
+- HTML/CSS (Tailwind CSS)
+- JavaScript 
 
-### Commandes à effectuer après importation du projet
-* composer install
-* npm i
-* npm build
-* Modifier le .env.example avec vos informations de connexion, et le renommer en .env
-* symfony console doctrine:migrations:migrate
+## ⬇️ Installation
+1. Il faut tout d'abord cloner ce répertoire vers votre machine locale.
+2. Les dépendances sont à installer avec Composer. Pour cela, exécutez `composer install`.
+3. Configurez votre base de données dans le fichier `.env`.
+4. Lancer les migrations pour créer les tables avec `php bin/console doctrine:migrations:migrate`.
+5. Enfin, démarrez le serveur Symfony avec `symfony server:start`.
+6. L'accès à l'application est réalisable dans votre navigateur à l'adresse diffusée par Symfony.
 
-### Informations supplémentaires
-Système de hachage des mots de passe et d'authentification réalisés par nos soins.
+## 👥 Contributeurs
+- Antoine Masia - [@MasiaAntoine](https://github.com/MasiaAntoine)
+- Tristan Leblond - [@TristanLBD](https://github.com/TristanLBD)
+- Alan Hilarion - [@ahilarion](https://github.com/ahilarion)

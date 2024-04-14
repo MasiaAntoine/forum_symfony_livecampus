@@ -3,10 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Message;
-use App\Entity\subject;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,11 +14,11 @@ class MessageType extends AbstractType
     {
         $builder
             ->add('content')
-            ->add('subject', EntityType::class, [
-                'class' => subject::class,
-                'choice_label' => 'name',
-            ])
-        ;
+            ->add('attachments', FileType::class, [
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

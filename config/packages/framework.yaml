@@ -14,3 +14,9 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+    assets:
+        packages:
+            uploaded_images:
+                base_path: /uploads_images
+                version: 1.0.0
+                version_format: '%%s?version=%%s'

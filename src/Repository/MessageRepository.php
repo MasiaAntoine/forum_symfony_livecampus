@@ -7,9 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Repository for accessing Message entities.
- *
- * This class extends ServiceEntityRepository<Message> which provides basic CRUD operations.
+ * @extends ServiceEntityRepository<Message>
  *
  * @method Message|null find($id, $lockMode = null, $lockVersion = null)
  * @method Message|null findOneBy(array $criteria, array $orderBy = null)

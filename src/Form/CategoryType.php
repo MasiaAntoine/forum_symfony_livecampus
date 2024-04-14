@@ -3,28 +3,38 @@
 namespace App\Form;
 
 use App\Entity\Category;
-use App\Entity\user;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // ->add('created_at', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('updated_at', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('user', EntityType::class, [
-            //     'class' => user::class,
-            //     'choice_label' => 'id',
-            // ])
             ->add('name')
+            ->add('rolesAllowed', ChoiceType::class, [
+                'label' => 'Visible by',
+                'required' => true,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => [
+                    'User' => 'ROLE_USER',
+                    'Insider' => 'ROLE_INSIDER',
+                    'External' => 'ROLE_EXTERNAL',
+                    'Collaborator' => 'ROLE_COLLABORATOR',
+                ],
+                'data' => ['ROLE_USER'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Merci de choisir un rôle',
+                    ]),
+                ],
+            ])
         ;
     }
 

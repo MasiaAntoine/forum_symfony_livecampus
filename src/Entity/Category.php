@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -16,24 +14,18 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updated_at = null;
-
-    /**
-     * @var Collection<int, Board>
-     */
-    #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'category', orphanRemoval: true)]
-    private Collection $boards;
-
-    #[ORM\ManyToOne(inversedBy: 'categories')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Board::class)]
+    private $boards;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $author;
+
+    #[ORM\Column(type: 'json')]
+    private array $rolesAllowed = [];
 
     public function __construct()
     {
@@ -45,68 +37,32 @@ class Category
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getRolesAllowed(): array
     {
-        return $this->created_at;
+        return $this->rolesAllowed;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): static
+    public function setRolesAllowed(array $rolesAllowed): static
     {
-        $this->created_at = $created_at;
+        $this->rolesAllowed = $rolesAllowed;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function addRoleAllowed(string $rolesAllowed): static
     {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Board>
-     */
-    public function getBoards(): Collection
-    {
-        return $this->boards;
-    }
-
-    public function addBoard(Board $board): static
-    {
-        if (!$this->boards->contains($board)) {
-            $this->boards->add($board);
-            $board->setCategory($this);
+        if (!in_array($rolesAllowed, $this->rolesAllowed)) {
+            $this->rolesAllowed[] = $rolesAllowed;
         }
 
         return $this;
     }
 
-    public function removeBoard(Board $board): static
+    public function removeRoleAllowed(string $rolesAllowed): static
     {
-        if ($this->boards->removeElement($board)) {
-            // set the owning side to null (unless already changed)
-            if ($board->getCategory() === $this) {
-                $board->setCategory(null);
-            }
+        if (in_array($rolesAllowed, $this->rolesAllowed)) {
+            $this->rolesAllowed = array_diff($this->rolesAllowed, [$rolesAllowed]);
         }
-
-        return $this;
-    }
-
-    public function getUser(): ?user
-    {
-        return $this->user;
-    }
-
-    public function setUser(?user $user): static
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -119,6 +75,44 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getBoards()
+    {
+        return $this->boards;
+    }
+
+    public function addBoard(Board $board): self
+    {
+        if (!$this->boards->contains($board)) {
+            $this->boards[] = $board;
+            $board->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoard(Board $board): self
+    {
+        if ($this->boards->removeElement($board)) {
+            if ($board->getCategory() === $this) {
+                $board->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

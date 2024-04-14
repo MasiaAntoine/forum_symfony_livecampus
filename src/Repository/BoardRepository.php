@@ -7,9 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Repository for accessing Board entities.
- *
- * This class extends ServiceEntityRepository<Board> which provides basic CRUD operations.
+ * @extends ServiceEntityRepository<Board>
  *
  * @method Board|null find($id, $lockMode = null, $lockVersion = null)
  * @method Board|null findOneBy(array $criteria, array $orderBy = null)

@@ -2,7 +2,7 @@
 Ce projet a été réalisé dans le cadre du cursus scolaire pour **LiveCampus**.
 
 ## 🗺️ Description
-**LiveCampus** est un réseau social d'entreprise conçu pour faciliter la communication, la collaboration au sein des équipes d'une entreprise, et accroître la productivité. Inspiré des forums en ligne, il permet aux utilisateurs de partager des informations, des messages et des fichiers dans un environnement sécurisé et convivial.
+Ce projet a pour but de créer un réseau social d'entreprise conçu pour faciliter la communication, la collaboration au sein des équipes d'une entreprise, et accroître la productivité. Inspiré des forums en ligne, il permet aux utilisateurs de partager des informations, des messages et des fichiers dans un environnement sécurisé et convivial.
 
 ## ⚙️ Fonctionnalités
 - **🔐 Authentication :**

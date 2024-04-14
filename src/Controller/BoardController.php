@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class BoardController extends AbstractController
 {
+    /**
+     * @Route("/board/{id}", name="app_board")
+     */
     #[Route('/board/{id}', name: 'app_board')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -62,6 +65,16 @@ class BoardController extends AbstractController
         ]);
     }
 
+    /**
+     * Deletes a board.
+     *
+     * @param EntityManagerInterface $entityManager The entity manager.
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     *
+     * @Route('/board/{id}/delete', name='app_board_delete')
+     */
     #[Route('/board/{id}/delete', name: 'app_board_delete')]
     public function delete(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -80,6 +93,15 @@ class BoardController extends AbstractController
         return $this->redirectToRoute('app_category', ['id' => $category->getId()]);
     }
 
+    /**
+     * Edit a board
+     *
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @param Request $request The request object
+     * @return Response The response object
+     *
+     * @Route('/board/{id}/edit', name='app_board_edit')
+     */
     #[Route('/board/{id}/edit', name: 'app_board_edit')]
     public function edit(EntityManagerInterface $entityManager, Request $request): Response
     {

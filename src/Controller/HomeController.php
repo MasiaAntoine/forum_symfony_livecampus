@@ -12,6 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    /**
+     * @Route("/", name="app_home")
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/', name: 'app_home')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {

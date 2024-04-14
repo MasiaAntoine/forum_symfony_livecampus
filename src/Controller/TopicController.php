@@ -15,6 +15,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TopicController extends AbstractController
 {
+    /**
+     * @Route("/topic/{id}", name="app_topic")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/topic/{id}', name: 'app_topic')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -71,6 +77,15 @@ class TopicController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/topic/{id}/delete", name="app_topic_delete")
+     * Deletes a topic
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     *
+     * @return Response
+     */
     #[Route('/topic/{id}/delete', name: 'app_topic_delete')]
     public function delete(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -101,6 +116,11 @@ class TopicController extends AbstractController
         return $this->redirectToRoute('app_board', ['id' => $topic->getBoard()->getId()]);
     }
 
+    /**
+     * Edit topic.
+     *
+     * @Route("/topic/{id}/edit", name="app_topic_edit")
+     */
     #[Route('/topic/{id}/edit', name: 'app_topic_edit')]
     public function edit(EntityManagerInterface $entityManager, Request $request): Response
     {

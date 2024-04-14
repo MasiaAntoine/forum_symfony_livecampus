@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProfileController extends AbstractController
 {
+    /**
+     * @Route("/profile/{id}", name="app_profile")
+     */
     #[Route('/profile/{id}', name: 'app_profile')]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -42,6 +45,14 @@ class ProfileController extends AbstractController
         ]);
     }
 
+    /**
+     * Edit user profile
+     *
+     * @Route("/profile/{id}/edit", name="app_profile_edit")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/profile/{id}/edit', name: 'app_profile_edit')]
     public function edit(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -95,6 +106,14 @@ class ProfileController extends AbstractController
         ]);
     }
 
+    /**
+     * Bans a user by adding the 'ROLE_BANNED' role to their profile.
+     *
+     * @Route('/profile/{id}/ban', name='app_profile_ban')
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @param Request $request The request object
+     * @return Response The response object
+     */
     #[Route('/profile/{id}/ban', name: 'app_profile_ban')]
     public function ban(EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -112,6 +131,16 @@ class ProfileController extends AbstractController
         return $this->redirectToRoute('app_profile', ['id' => $this->getUser()->getId()]);
     }
 
+    /**
+     * Unban user profile
+     *
+     * @param EntityManagerInterface $entityManager The entity manager
+     * @param Request $request The request object
+     *
+     * @return Response The response object
+     *
+     * @Route('/profile/{id}/unban', name='app_profile_unban')
+     */
     #[Route('/profile/{id}/unban', name: 'app_profile_unban')]
     public function unban(EntityManagerInterface $entityManager, Request $request): Response
     {

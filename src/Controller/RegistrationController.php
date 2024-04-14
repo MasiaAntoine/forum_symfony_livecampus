@@ -15,6 +15,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+    /**
+     * Registers a new user.
+     *
+     * @Route("/register", name="app_register")
+     * @param Request $request The request object
+     * @param UserPasswordHasherInterface $userPasswordHasher The user password hasher object
+     * @param Security $security The security object
+     * @param EntityManagerInterface $entityManager The entity manager object
+     * @return Response The response object
+     */
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {

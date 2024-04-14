@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - {{ topic.title }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <nav class="bg-white dark:bg-gray-800 shadow-md rounded-md mb-4">
+            <div class="px-8 py-4 flex justify-between items-center">
+
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Bienvenue sur votre espace personnel</h3>
+                <div class="flex items-center gap-4">
+                    <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-700">Déconnexion</a>
+                    <a href="{{ path('app_profile', { 'id': app.user.id }) }}" class="flex items-center gap-2">
+                        {% if app.user.profilePicture is not null %}
+                            <img src="{{ asset('uploads/profile_picture/' ~ user.profilePicture) }}" alt="Image de profil de {{ user.username }}" class="rounded-full w-16 h-16">
+                        {% else %}
+                            <img src="{{ asset('profile_blank.jpeg') }}" alt="Avatar" class="w-16 h-16 rounded-full">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md px-8 py-4 mb-4">
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Accueil</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_category', { 'id': topic.board.category.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.board.category.name }}</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_category', { 'id': topic.board.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.board.name }}</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_category', { 'id': topic.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.title }}</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 flex gap-8">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Éditer un topic</h2>
+                {{ form_start(form) }}
+                <div class="mb-4">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Titre</label>
+                        {{ form_widget(form.title, {'attr': {'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                        {{ form_errors(form.title) }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="{{ form.rolesAllowed.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rôles</label>
+                        {{ form_widget(form.rolesAllowed, {'attr': {'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 dark:text-white border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 flex items-center gap-4'}}) }}
+                        {{ form_errors(form.rolesAllowed) }}
+                    </div>
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Enregistrer</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

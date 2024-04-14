@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Profil de {{ user.username }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <nav class="bg-white dark:bg-gray-800 shadow-md rounded-md mb-4">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Profil de {{ user.username }}</h3>
+                {% if app.user and app.user == user %}
+                    <a href="{{ path('app_profile_edit', {'id': user.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Modifier</a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md px-8 py-4 mb-4">
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Accueil</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_profile', {'id': user.id}) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Profil de {{ user.username }}</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 flex gap-8">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 max-w-md w-full max-h-[400px] flex flex-col items-center justify-center">
+                <div class="flex flex-col items-center gap-4">
+                    {% if user.profilePicture %}
+                        <img src="{{ asset('uploads/profile_picture/' ~ user.profilePicture) }}" alt="Image de profil de {{ user.username }}" class="rounded-full w-32 h-32">
+                    {% else %}
+                        <img src="{{ asset('profile_blank.jpeg') }}" alt="Image de profil par défaut" class="rounded-full w-32 h-32">
+                    {% endif %}
+                    <div class="flex gap-4 flex-wrap justify-center">
+                        {% if user.roles is defined and 'ROLE_ADMIN' in user.roles %}
+                            <span class="bg-red-500 text-white px-2 py-1 rounded-md">Admin</span>
+                        {% endif %}
+                        {% if user.roles is defined and 'ROLE_USER' in user.roles %}
+                            <span class="bg-green-500 text-white px-2 py-1 rounded-md">Utilisateur</span>
+                        {% endif %}
+                        {% if user.roles is defined and 'ROLE_BANNED' in user.roles %}
+                            <span class="bg-orange-500 text-white px-2 py-1 rounded-md">Banni</span>
+                        {% endif %}
+                        {% if user.roles is defined and 'ROLE_INSIDER' in user.roles %}
+                            <span class="bg-blue-500 text-white px-2 py-1 rounded-md">Insider</span>
+                        {% endif %}
+                        {% if user.roles is defined and 'ROLE_COLLABORATOR' in user.roles %}
+                            <span class="bg-yellow-500 text-white px-2 py-1 rounded-md">Collaborateur</span>
+                        {% endif %}
+                        {% if user.roles is defined and 'ROLE_EXTERNAL' in user.roles %}
+                            <span class="bg-purple-500 text-white px-2 py-1 rounded-md">Externe</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-lg font-semibold text-gray-800 dark:text-gray-200">Pseudo: {{ user.username }}</p>
+                    <p class="text-lg font-semibold text-gray-800 dark:text-gray-200">Email: {{ user.email }}</p>
+                    {# Autres informations sur l'utilisateur à afficher ici #}
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Messages de {{ user.username }}</h2>
+                {% if user.messages is empty %}
+                    <p class="text-gray-800 dark:text-gray-200">Cet utilisateur n'a pas encore publié de messages.</p>
+                {% else %}
+                    <ul>
+                        {% for message in user.messages %}
+                            {% if message.author == app.user %}
+                                <li class="bg-blue-100 dark:bg-blue-800 shadow-md rounded-md p-4 mb-4">
+                            {% else %}
+                                <li class="bg-gray-100 dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
+                            {% endif %}
+                                <p class="text-gray-800 dark:text-gray-200">{{ message.content }}</p>
+                                <p class="text-gray-800 dark:text-gray-200 text-sm">Publié le {{ message.createdAt|date('d/m/Y à H:i') }} dans le fil de discussion <a href="{{ path('app_topic', {'id': message.topic.id}) }}" class="text-blue-500 dark:text-blue-500">{{ message.topic.title }}</a></p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+        {% if app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles and app.user == user %}
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 mt-4">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full flex flex-col items-start gap-4">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Liste des utilisateurs</h2>
+                <ul class="w-full flex flex-col gap-4">
+                    {% for user in users %}
+                        <li class="bg-gray-100 dark:bg-gray-800 shadow-md rounded-md p-4 flex justify-between items-center">
+                            <div class="flex items-center gap-4">
+                                {% if user.roles is defined and 'ROLE_ADMIN' in user.roles %}
+                                    <span class="bg-red-500 text-white px-2 py-1 rounded-md">Admin</span>
+                                {% else %}
+                                    <span class="bg-green-500 text-white px-2 py-1 rounded-md">Utilisateur</span>
+                                {% endif %}
+
+                                {% if user.roles is defined and 'ROLE_BANNED' in user.roles %}
+                                    <span class="bg-orange-500 text-white px-2 py-1 rounded-md">Banni</span>
+                                {% endif %}
+
+                                {{ user.username }}
+                            </div>
+                            <div class="flex gap-4">
+                                <a href="{{ path('app_profile', {'id': user.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Voir</a>
+                                {% if user.roles is defined and 'ROLE_ADMIN' not in user.roles %}
+                                    <a href="{{ path('app_profile_edit', {'id': user.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Modifier</a>
+                                    {% if user.roles is defined and 'ROLE_BANNED' in user.roles %}
+                                        <a href="{{ path('app_profile_unban', {'id': user.id}) }}" class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-md">Débannir</a>
+                                    {% else %}
+                                        <a href="{{ path('app_profile_ban', {'id': user.id}) }}" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md">Bannir</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

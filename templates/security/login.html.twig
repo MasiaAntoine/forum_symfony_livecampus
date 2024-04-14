@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Connexion{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center w-full">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg px-8 py-6 max-w-md min-w-[500px]">
+            <h1 class="text-2xl font-bold text-center mb-4 dark:text-gray-200">Connexion</h1>
+            <form method="post" class="flex flex-col gap-4">
+
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        Tu es connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <div>
+                    <label for="inputEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="shadow-sm rounded-md w-full text-black px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" autocomplete="email" required autofocus placeholder="Entrez votre adresse email">
+                </div>
+
+                <div>
+                    <label for="inputPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="shadow-sm rounded-md w-full px-3 py-2 border text-black border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" autocomplete="current-password" required placeholder="Entrez votre mot de passe">
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="_remember_me" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none">
+                        <label for="_remember_me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Se souvenir de moi</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    Se connecter
+                </button>
+
+                <!-- add not registered link -->
+                <div class="mt-4 text-center">
+                    <p>Pas encore inscrit ? <a href="{{ path('app_register') }}" class="text-blue-500 hover:underline">Inscription</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

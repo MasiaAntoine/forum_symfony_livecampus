@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Profil de {{ user.username }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <nav class="bg-white dark:bg-gray-800 shadow-md rounded-md mb-4">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Édition du profil de {{ user.username }}</h3>
+            </div>
+        </nav>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md px-8 py-4 mb-4">
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Accueil</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_profile', {'id': user.id}) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Profil de {{ user.username }}</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 flex gap-8">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Informations personnelles</h2>
+                {{ form_start(form) }}
+                <div class="mb-4">
+                    <label for="{{ form.username.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nom d'utilisateur</label>
+                    {{ form_widget(form.username, {'attr': {'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {{ form_errors(form.username) }}
+                </div>
+                {% if app.user.roles is defined and 'ROLE_ADMIN' in app.user.roles %}
+                    <div class="mb-4">
+                        <label for="{{ form.roles.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rôles</label>
+                        {{ form_widget(form.roles, {'attr': {'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 dark:text-white border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 flex items-center gap-4'}}) }}
+                        {{ form_errors(form.roles) }}
+                    </div>
+                {% endif %}
+                <div class="mb-4">
+                    <label for="{{ form.profilePicture.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo de profil</label>
+                    {{ form_widget(form.profilePicture, {'attr': {'class': 'shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+                    {{ form_errors(form.profilePicture) }}
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Enregistrer</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

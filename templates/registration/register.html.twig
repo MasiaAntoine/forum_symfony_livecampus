@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - Inscription{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center w-full">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg px-8 py-6 max-w-md min-w-[500px]">
+            <h1 class="text-2xl font-bold text-center mb-4 dark:text-gray-200">Inscription</h1>
+            {{ form_start(registrationForm) }}
+            <div class="mb-4">
+                <label for="{{ registrationForm.username.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pseudonyme</label>
+                {{ form_widget(registrationForm.username, { 'attr': { 'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' } }) }}
+                {{ form_errors(registrationForm.username) }}
+            </div>
+            <div class="mb-4">
+                <label for="{{ registrationForm.email.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                {{ form_widget(registrationForm.email, { 'attr': { 'class': 'shadow-sm rounded-md w-full px-3 text-black py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' } }) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+            <div class="mb-4">
+                <label for="{{ registrationForm.plainPassword.vars.id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
+                {{ form_widget(registrationForm.plainPassword, { 'attr': { 'class': 'shadow-sm rounded-md w-full text-black px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' } }) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    {{ form_widget(registrationForm.agreeTerms, { 'attr': { 'class': 'h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 focus:outline-none' } }) }}
+                    <label for="{{ registrationForm.agreeTerms.vars.id }}" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">J'accepte les <a href="#" class="text-blue-500 hover:text-blue-700">conditions d'utilisation</a></label>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                S'inscrire
+            </button>
+            {{ form_end(registrationForm) }}
+
+            <div class="mt-4 text-center">
+                <p>Déjà inscrit ? <a href="{{ path('app_login') }}" class="text-blue-500 hover:text-blue-700">Connectez-vous</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

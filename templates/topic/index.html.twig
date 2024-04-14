@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum - {{ topic.title }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto my-8">
+        <nav class="bg-white dark:bg-gray-800 shadow-md rounded-md mb-4">
+            <div class="px-8 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Bienvenue sur votre espace personnel</h3>
+                <div class="flex items-center gap-4">
+                    <a href="{{ path('app_logout') }}" class="text-red-500 hover:text-red-700">Déconnexion</a>
+                    <a href="{{ path('app_profile', { 'id': app.user.id }) }}" class="flex items-center gap-2">
+                        {% if app.user.profilePicture is not null %}
+                            <img src="{{ asset('uploads/profile_picture/' ~ user.profilePicture) }}" alt="Image de profil de {{ user.username }}" class="rounded-full w-16 h-16">
+                        {% else %}
+                            <img src="{{ asset('profile_blank.jpeg') }}" alt="Avatar" class="w-16 h-16 rounded-full">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md px-8 py-4 mb-4">
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">Accueil</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_category', { 'id': topic.board.category.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.board.category.name }}</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_board', { 'id': topic.board.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.board.name }}</a>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">/</span>
+                <a href="{{ path('app_topic', { 'id': topic.id }) }}" class="text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-500">{{ topic.title }}</a>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-8 flex gap-8 flex-col">
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full flex items-center justify-start gap-4">
+                <h1>Nombres de participants : {{ topic.users|length }}</h1>
+                <span class="mx-2 text-gray-400 dark:text-gray-500">-</span>
+                <h1>Nombre de messages : {{ topic.messages|length }}</h1>
+            </div>
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6 w-full">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Liste des messages du sujet : {{ topic.title }}</h2>
+                {% if topic.messages is empty %}
+                    <p class="text-gray-800 dark:text-gray-200">Il n'y a pas de messages pour le moment.</p>
+                {% else %}
+                    <ul class="max-h-96 overflow-y-auto">
+                        {% for message in topic.messages %}
+                            {% if message.author == app.user %}
+                                <li class="bg-blue-100 dark:bg-blue-800 shadow-md rounded-md p-4 mb-4">
+                            {% else %}
+                                <li class="bg-gray-100 dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
+                            {% endif %}
+                                <p class="text-gray-800 dark:text-gray-200">{{ message.content }}</p>
+                                <p class="text-gray-600 dark:text-gray-400">
+                                    <a href="{{ path('app_profile', { 'id': message.author.id }) }}" class="text-blue-500 hover:text-blue-700">{{ message.author.username }}</a>
+                                    le {{ message.createdAt|date('d/m/Y') }} à {{ message.createdAt|date('H:i:s') }}</p>
+                                {% if message.attachments is not empty %}
+                                    <div class="flex gap-4 mt-4 flex-wrap">
+                                        {% for attachment in message.attachments %}
+                                            <a href="{{ asset('uploads/attachment/' ~ attachment.filePath) }}" class="text-blue-500 hover:text-blue-700" target="_blank">{{ attachment.fileName }}</a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="bg-white dark:bg-gray-900 shadow-md rounded-lg px-8 py-6">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Ajouter un nouveau message</h3>
+                {{ form_start(form) }}
+                <div class="mb-4">
+                    {{ form_label(form.content, 'Contenu du message', { 'label_attr': {'class': 'text-gray-800 dark:text-gray-200'} }) }}
+                    {{ form_widget(form.content, { 'attr': {'class': 'px-4 py-2 mt-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-black'}, 'row_attr': {'class': 'mb-4'} }) }}
+                </div>
+                <div class="flex flex-col mb-4">
+                    {{ form_widget(form.attachments, { 'attr': {'class': 'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400'}, 'row_attr': {'class': 'mb-4'} }) }}
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Formats acceptés : .png, .jpg, .jpeg, .gif, .pdf, .docx, .xlsx, .pptx, .txt</p>
+                    {{ form_errors(form.attachments, { 'attr': {'class': 'text-red-500 text-sm'} }) }}
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Envoyer</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
